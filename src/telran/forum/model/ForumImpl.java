@@ -10,6 +10,7 @@ public class ForumImpl implements Forum {
 
 	private Post[] posts;
 	private int size;
+	LocalDateTime dateNow = null;
 
 	public ForumImpl() {
 		posts = new Post[0];
@@ -17,6 +18,8 @@ public class ForumImpl implements Forum {
 
 	@Override
 	public boolean addPost(Post post) {
+		dateNow = LocalDateTime.now();
+		post.setDate(dateNow);
 		posts = Arrays.copyOf(posts, posts.length + 1);
 
 		if (getPostById(post.getPostId()) != null || post == null) {
@@ -27,12 +30,13 @@ public class ForumImpl implements Forum {
 		System.arraycopy(posts, index, posts, index + 1, size - index);
 		posts[index] = post;
 		size++;
+
 		return true;
 	}
 
 	@Override
 	public boolean removePost(int postId) {
-		Post pattern = new Post(null, postId, null, null, null, 0);
+		Post pattern = new Post(null, postId, null, null);
 		int index = search(pattern);
 		if (index >= 0) {
 			System.arraycopy(posts, index + 1, posts, index, posts.length - index - 1);
@@ -55,7 +59,7 @@ public class ForumImpl implements Forum {
 
 	@Override
 	public Post getPostById(int postId) {
-		Post pattern = new Post(null, postId, null, null, null, 0);
+		Post pattern = new Post(null, postId, null, null);
 		int index = search(pattern);
 		if (index >= 0) {
 			return posts[index];
@@ -70,13 +74,8 @@ public class ForumImpl implements Forum {
 
 	@Override
 	public Post[] getPostsByAuthor(String author, LocalDate dateFrom, LocalDate dateTo) {
-		Post[] authorsArray = getPostsByAuthor(author);
-
-		Post pattern = new Post(author, Integer.MIN_VALUE, null, null, dateFrom.atStartOfDay(), 0);
-		int from = -Arrays.binarySearch(authorsArray, 0, authorsArray.length, pattern) - 1;
-		pattern = new Post(author, Integer.MAX_VALUE, null, null, LocalDateTime.of(dateTo, LocalTime.MAX), 0);
-		int to = -Arrays.binarySearch(authorsArray, 0, authorsArray.length, pattern) - 1;
-		return Arrays.copyOfRange(authorsArray, from, to);
+		return findByPredicate(p -> p.getDate().toLocalDate().compareTo(dateFrom) >= 0
+				&& p.getDate().toLocalDate().compareTo(dateTo) <= 0);
 	}
 
 	@Override

@@ -10,13 +10,11 @@ public class Post implements Comparable<Post> {
 	private LocalDateTime date;
 	private int likes;
 
-	public Post(String author, int postId, String title, String content, LocalDateTime date, int likes) {
+	public Post(String author, int postId, String title, String content) {
 		this.author = author;
 		this.postId = postId;
 		this.title = title;
 		this.content = content;
-		this.date = date;
-		this.likes = likes;
 	}
 
 	public String getContent() {

@@ -23,16 +23,23 @@ class ForumImplTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		forum = new ForumImpl();
-		posts[0] = new Post("author1", 1, "title1", "content1", now.minusDays(3), 0);
-		posts[1] = new Post("author1", 5, "title5", "content5", now.minusDays(5), 0);
-		posts[2] = new Post("author1", 4, "title4", "content4", now.minusDays(1), 0);
-		posts[3] = new Post("author2", 3, "title3", "content3", now.minusDays(6), 0);
-		posts[4] = new Post("author2", 2, "title2", "content2", now.minusDays(2), 0);
-
+		posts[0] = new Post("author1", 1, "title1", "content1");
+		posts[1] = new Post("author1", 5, "title5", "content5");
+		posts[2] = new Post("author1", 4, "title4", "content4");
+		posts[3] = new Post("author2", 3, "title3", "content3");
+		posts[4] = new Post("author2", 2, "title2", "content2");
 		for (int i = 0; i < posts.length - 1; i++) {
 			forum.addPost(posts[i]);
 		}
-		posts[5] = new Post("author6", 6, "title6", "content6", now.minusDays(4), 0); // not added
+		posts[5] = new Post("author6", 6, "title6", "content6"); // not added
+
+		posts[0].setDate(now.minusDays(6));
+		posts[1].setDate(now.minusDays(5));
+		posts[2].setDate(now.minusDays(4));
+		posts[3].setDate(now.minusDays(3));
+		posts[4].setDate(now.minusDays(2));
+		posts[5].setDate(now.minusDays(1));
+
 	}
 
 	@Test
@@ -76,9 +83,9 @@ class ForumImplTest {
 	@Test
 	void testGetPostsByAuthorStringLocalDateLocalDate() {
 		LocalDate dateNow = now.toLocalDate();
-		Post[] actuals = forum.getPostsByAuthor("author1", dateNow.minusDays(4), dateNow);
+		Post[] actuals = forum.getPostsByAuthor("author1", dateNow.minusDays(5), dateNow.minusDays(4));
 		Arrays.sort(actuals, comp);
-		Post[] expecteds = { posts[0], posts[2] };
+		Post[] expecteds = { posts[2], posts[1] };
 		assertArrayEquals(expecteds, actuals);
 	}
 

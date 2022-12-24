@@ -15,7 +15,7 @@ public interface Forum {
 	Post[] getPostsByAuthor(String author);
 
 	Post[] getPostsByAuthor(String author, LocalDate dateFrom, LocalDate dateTo);
-	
+
 	int size();
 
 }
