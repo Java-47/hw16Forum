@@ -83,9 +83,9 @@ class ForumImplTest {
 	@Test
 	void testGetPostsByAuthorStringLocalDateLocalDate() {
 		LocalDate dateNow = now.toLocalDate();
-		Post[] actuals = forum.getPostsByAuthor("author1", dateNow.minusDays(5), dateNow.minusDays(4));
+		Post[] actuals = forum.getPostsByAuthor("author2", dateNow.minusDays(2), dateNow);
 		Arrays.sort(actuals, comp);
-		Post[] expecteds = { posts[2], posts[1] };
+		Post[] expecteds = { posts[4] };
 		assertArrayEquals(expecteds, actuals);
 	}
 

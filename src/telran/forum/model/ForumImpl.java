@@ -69,13 +69,14 @@ public class ForumImpl implements Forum {
 
 	@Override
 	public Post[] getPostsByAuthor(String author) {
-		return findByPredicate(p -> p.getAuthor() == author);
+		return findByPredicate(p -> p.getAuthor() == author, posts);
 	}
 
 	@Override
 	public Post[] getPostsByAuthor(String author, LocalDate dateFrom, LocalDate dateTo) {
+		Post[]arrayOfAuthors = getPostsByAuthor(author);
 		return findByPredicate(p -> p.getDate().toLocalDate().compareTo(dateFrom) >= 0
-				&& p.getDate().toLocalDate().compareTo(dateTo) <= 0);
+				&& p.getDate().toLocalDate().compareTo(dateTo) <= 0,arrayOfAuthors);
 	}
 
 	@Override
@@ -84,12 +85,12 @@ public class ForumImpl implements Forum {
 		return size;
 	}
 
-	private Post[] findByPredicate(Predicate<Post> predicate) {
-		Post[] res = new Post[size];
+	private Post[] findByPredicate(Predicate<Post> predicate, Post[] array) {
+		Post[] res = new Post[array.length];
 		int j = 0;
-		for (int i = 0; i < size; i++) {
-			if (predicate.test(posts[i])) {
-				res[j++] = posts[i];
+		for (int i = 0; i < array.length; i++) {
+			if (predicate.test(array[i])) {
+				res[j++] = array[i];
 			}
 		}
 		return Arrays.copyOf(res, j);
